@@ -19,7 +19,6 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class Book implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @TableId
@@ -54,6 +53,10 @@ public class Book implements Serializable {
     private String type;
 
     private Integer source;
+
+    private Long hits;
+
+    private String otherId;
 
 
 }

@@ -3,6 +3,7 @@ package com.my.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.my.demo.service.IBookService;
+import com.my.demo.utils.BookDownProcess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,18 +27,21 @@ public class BookController {
 
     @Autowired
     private IBookService iBookService;
+    @Autowired
+    private BookDownProcess bookDownProcess;
 
     @GetMapping("/{id}")
     public String find(@PathVariable Long id){
         return JSONObject.toJSONString(iBookService.getById(id));
     }
 
-    @GetMapping("/start/{url}")
-    public String start(@PathVariable String url){
+    @GetMapping("/start")
+    public String start(){
         try {
-            iBookService.start(url);
+            bookDownProcess.start();
         }catch (Exception e){
             logger.error("BookController.start error",e);
+            return e.getMessage();
         }
         return "success";
     }
