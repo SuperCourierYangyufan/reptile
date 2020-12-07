@@ -5,17 +5,16 @@ package com.my.demo.content;
  * @create 2020-12-07
  */
 public enum BookEnum {
-    qishu(1,"http://www.uidzhx.com/Shtml10376.html"),
-    unknown(0,"");
+    qishu(1, "http://www.uidzhx.com/Shtml10376.html","http://www.uidzhx.com/Shtml[0-9]{4,8}.html"),
+    ;
     private Integer source;
     private String baseUrl;
+    private String likeUrl;
 
-    BookEnum() {
-    }
-
-    BookEnum(Integer source, String baseUrl) {
+    BookEnum(Integer source, String baseUrl, String likeUrl) {
         this.source = source;
         this.baseUrl = baseUrl;
+        this.likeUrl = likeUrl;
     }
 
     public Integer getSource() {
@@ -32,4 +31,12 @@ public enum BookEnum {
 
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
+    }
+
+    public String getLikeUrl() {
+        return likeUrl;
+    }
+
+    public void setLikeUrl(String likeUrl) {
+        this.likeUrl = likeUrl;
     }}

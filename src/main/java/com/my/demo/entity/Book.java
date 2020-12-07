@@ -54,10 +54,10 @@ public class Book implements Serializable {
 
     private Integer source;
 
-    private Long hits;
+    private String hits;
 
     @TableField("otherId")
     private String otherId;
 
-
+    private Integer version;
 }

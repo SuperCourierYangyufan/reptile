@@ -27,8 +27,6 @@ public class BookController {
 
     @Autowired
     private IBookService iBookService;
-    @Autowired
-    private BookDownProcess bookDownProcess;
 
     @GetMapping("/{id}")
     public String find(@PathVariable Long id){
@@ -38,7 +36,7 @@ public class BookController {
     @GetMapping("/start")
     public String start(){
         try {
-            bookDownProcess.start();
+            new BookDownProcess().start();
         }catch (Exception e){
             logger.error("BookController.start error",e);
             return e.getMessage();
