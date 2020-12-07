@@ -56,6 +56,7 @@ public class Book implements Serializable {
 
     private Long hits;
 
+    @TableField("otherId")
     private String otherId;
 
 

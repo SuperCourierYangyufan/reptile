@@ -5,7 +5,6 @@ import com.my.demo.entity.Book;
 import com.my.demo.service.IBookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
@@ -20,8 +19,6 @@ import java.util.Date;
  */
 @Service
 public class BookDownProcess implements PageProcessor {
-    @Autowired
-    private IBookService iBookService;
     private String url;
     private Integer source;
 
@@ -33,7 +30,7 @@ public class BookDownProcess implements PageProcessor {
     public void process(Page page) {
         String name = page.getHtml().xpath("//div[@class='detail_right']/h1/text()").get();
         String url = page.getUrl().get();
-        String author = page.getHtml().xpath("//div[@class='detail_right']/ul/li[6]").get();
+        String author = page.getHtml().xpath("//div[@class='detail_right']/ul/li[6]/text()").get();
         String[] urls = url.split("/");
         String[] oherId = urls[urls.length - 1].split(".html");
 
@@ -44,6 +41,7 @@ public class BookDownProcess implements PageProcessor {
         book.setUrl(url);
         book.setAuthor(author);
         book.setOtherId(oherId[1]);
+        IBookService iBookService = (IBookService) SpringContextUtil.getBean(IBookService.class);
         iBookService.saveOrUpdate(book);
     }
 
