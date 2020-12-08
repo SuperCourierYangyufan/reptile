@@ -5,7 +5,7 @@ package com.my.demo.content;
  * @create 2020-12-07
  */
 public enum BookEnum {
-    qishu(1, "http://www.uidzhx.com/Shtml10376.html","http://www.uidzhx.com/Shtml[0-9]{4,8}.html"),
+    qishu(1,"http://www.qishus.com/txt/77746.html","http://www.qishus.com/txt/[0-9]{4,7}.html")
     ;
     private Integer source;
     private String baseUrl;
