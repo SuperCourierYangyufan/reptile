@@ -1,10 +1,12 @@
 package com.my.demo.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.my.demo.content.BookEnum;
 import com.my.demo.content.StatusEnum;
 import com.my.demo.entity.Book;
 import com.my.demo.service.IBookService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -29,8 +31,21 @@ public class BookDownProcess implements PageProcessor {
     @Override
     public void process(Page page) {
         try {
-            Book book = new Book();
-            book.setCreatetime(new Date());
+            String[] urlSplit = page.getUrl().toString().split("/");
+            String otherId = urlSplit[urlSplit.length - 1].split("\\.")[0];
+            IBookService iBookService = (IBookService) SpringContextUtil.getBean(IBookService.class);
+             QueryWrapper<Book> queryWrapper = new QueryWrapper<Book>();
+             queryWrapper.eq("otherId",otherId);
+            Book selectOne = iBookService.getBaseMapper().selectOne(queryWrapper);
+            Book book;
+            if(selectOne == null){
+                book = new Book();
+                book.setVersion(1);
+                book.setCreatetime(new Date());
+            }else{
+                book = selectOne;
+                book.setVersion(book.getVersion()+1);
+            }
             book.setUpdatetime(new Date());
             book.setDeleted(0L);
             book.setUrl(page.getUrl().toString());
@@ -49,19 +64,16 @@ public class BookDownProcess implements PageProcessor {
             book.setSize(size);
             book.setLastupdatetime(lastupdatetime);
             String lntroduction = page.getHtml().xpath("div[@id='mainSoftIntro']/p[2]/text()").get();
+            if(StringUtils.isEmpty(lntroduction))lntroduction = page.getHtml().xpath("div[@id='mainSoftIntro']/text(1)").get();
             book.setLntroduction(lntroduction);
             book.setStatus(StatusEnum.unknown.getCode());
-            book.setVersion(1);
             book.setSource(BookEnum.qishu.getSource());
-            String[] urlSplit = page.getUrl().toString().split("/");
-            String otherId = urlSplit[urlSplit.length - 1].split("\\.")[0];
             book.setOtherId(otherId);
             logger.info("====================================存储对象:"+ JSONObject.toJSONString(book)+"=========================");
 //            String type = page.getHtml().xpath("//div[contains(@class,'wrap') and contains(@class,'position')]/span/a[2]/text()").get();
 
 
 
-            IBookService iBookService = (IBookService) SpringContextUtil.getBean(IBookService.class);
             iBookService.saveOrUpdate(book);
 
 
