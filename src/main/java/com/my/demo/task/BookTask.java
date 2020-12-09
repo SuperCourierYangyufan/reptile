@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class BookTask {
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 0 16 * * ?")
     private void fun(){
         try {
             log.info("===================Task Book start========================");
