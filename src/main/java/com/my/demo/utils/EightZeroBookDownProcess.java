@@ -1,7 +1,12 @@
 package com.my.demo.utils;
 
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.my.demo.content.BookEnum;
+import com.my.demo.entity.Book;
+import com.my.demo.service.IBookService;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
@@ -9,6 +14,7 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,8 +36,51 @@ public class EightZeroBookDownProcess implements PageProcessor {
             List<String> urls = list.stream().map(url -> EightZeroUrl + url).collect(Collectors.toList());
             page.addTargetRequests(urls);
         }
-        //详情数据
+        String name = page.getHtml().xpath("//dd[@class='bt']/h2/text()").get();
+        if(!StringUtils.isEmpty(name)){
+            String url = page.getUrl().get();
+            String[] split = url.split("/");
+            String[] other = split[split.length - 1].split("\\.");
+            String otherId = other[0];
 
+            IBookService iBookService = (IBookService) SpringContextUtil.getBean(IBookService.class);
+            QueryWrapper<Book> queryWrapper = new QueryWrapper<Book>();
+            queryWrapper.eq("otherId",otherId);
+            Book selectOne = iBookService.getBaseMapper().selectOne(queryWrapper);
+            Book book;
+            if(selectOne == null){
+                book = new Book();
+                book.setCreatetime(new Date());
+            }else{
+                book = selectOne;
+                book.setVersion(book.getVersion()+1);
+            }
+
+            //详情数据
+            String author = page.getHtml().xpath("//div[@class='nrlist']/dl/dd[@class='db'][2]/a/text()").get();
+            String status = page.getHtml().xpath("//div[@class='nrlist']/dl/dd[@class='db'][3]/span/text()").get();
+            String type = page.getHtml().xpath("//div[@class='nrlist']/dl/dd[@class='db'][4]/a/text()").get();
+            String size = page.getHtml().xpath("//div[@class='nrlist']/dl/dd[@class='db'][7]/span/text()").get();
+            String lastupteTime = page.getHtml().xpath("//div[@class='nrlist']/dl/dd[@class='db'][8]/span/text()").get();
+            String content = page.getHtml().xpath("//div[@class='cont']/text(2)").get();
+
+
+            book.setUpdatetime(new Date());
+            book.setDeleted(0L);
+            book.setName(name);
+            book.setUrl(url);
+            book.setAuthor(author);
+            book.setSize(size);
+            book.setLntroduction(content);
+            book.setLastupdatetime(lastupteTime);
+            book.setStatus(status);
+            book.setType(type);
+            book.setSource(BookEnum.EightZero.getSource());
+
+            book.setOtherId(otherId);
+            logger.info("====================================存储对象:"+ JSONObject.toJSONString(book)+"=========================");
+
+        }
         page.addTargetRequests(page.getHtml().links().regex(BookEnum.EightZero.getLikeUrl()).all());
     }
 
