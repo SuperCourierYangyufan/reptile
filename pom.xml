@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.my</groupId>
     <artifactId>demo</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.1</version>
     <name>demo</name>
     <description>yufan.yang Demo</description>
     <packaging>war</packaging>
@@ -116,6 +116,7 @@
     </dependencies>
 
     <build>
+        <finalName>book</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

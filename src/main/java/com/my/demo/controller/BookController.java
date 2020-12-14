@@ -3,7 +3,7 @@ package com.my.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.my.demo.service.IBookService;
-import com.my.demo.utils.BookDownProcess;
+import com.my.demo.utils.EightZeroBookDownProcess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class BookController {
     @GetMapping("/start")
     public String start(){
         try {
-            new BookDownProcess().start();
+            new EightZeroBookDownProcess().start();
         }catch (Exception e){
             logger.error("BookController.start error",e);
             return e.getMessage();
