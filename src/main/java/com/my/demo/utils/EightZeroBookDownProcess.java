@@ -79,7 +79,7 @@ public class EightZeroBookDownProcess implements PageProcessor {
 
             book.setOtherId(otherId);
             logger.info("====================================存储对象:"+ JSONObject.toJSONString(book)+"=========================");
-
+            iBookService.saveOrUpdate(book);
         }
         page.addTargetRequests(page.getHtml().links().regex(BookEnum.EightZero.getLikeUrl()).all());
     }
