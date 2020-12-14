@@ -27,7 +27,6 @@ public class BookDownProcess implements PageProcessor {
     private Site site = Site.me().setTimeOut(5000).setRetryTimes(3).setSleepTime(1000);
 
 
-
     @Override
     public void process(Page page) {
         try {

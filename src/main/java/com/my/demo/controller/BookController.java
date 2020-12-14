@@ -28,7 +28,7 @@ public class BookController {
     @Autowired
     private IBookService iBookService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/find/{id}")
     public String find(@PathVariable Long id){
         return JSONObject.toJSONString(iBookService.getById(id));
     }
