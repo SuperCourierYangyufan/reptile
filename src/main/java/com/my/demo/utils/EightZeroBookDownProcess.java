@@ -67,7 +67,7 @@ public class EightZeroBookDownProcess implements PageProcessor {
             String size = page.getHtml().xpath("//div[@class='nrlist']/dl/dd[@class='db'][7]/span/text()").get();
             String lastupteTime = page.getHtml().xpath("//div[@class='nrlist']/dl/dd[@class='db'][8]/span/text()").get();
             String content = page.getHtml().xpath("//div[@class='cont']/text(2)").get();
-            if(StringUtils.isEmpty(content)){
+            if(StringUtils.isEmpty(content.trim())){
                 content = page.getHtml().xpath("//div[@class='cont']/p/text()").get();
             }
 
