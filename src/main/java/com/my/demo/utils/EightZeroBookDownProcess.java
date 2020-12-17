@@ -51,8 +51,12 @@ public class EightZeroBookDownProcess implements PageProcessor {
             if(selectOne == null){
                 book = new Book();
                 book.setCreatetime(new Date());
+                book.setVersion(1);
             }else{
                 book = selectOne;
+                if(book.getVersion() == null||book.getVersion()==0){
+                    book.setVersion(1);
+                }
                 book.setVersion(book.getVersion()+1);
             }
 
@@ -63,7 +67,9 @@ public class EightZeroBookDownProcess implements PageProcessor {
             String size = page.getHtml().xpath("//div[@class='nrlist']/dl/dd[@class='db'][7]/span/text()").get();
             String lastupteTime = page.getHtml().xpath("//div[@class='nrlist']/dl/dd[@class='db'][8]/span/text()").get();
             String content = page.getHtml().xpath("//div[@class='cont']/text(2)").get();
-
+            if(StringUtils.isEmpty(content)){
+                content = page.getHtml().xpath("//div[@class='cont']/p/text()").get();
+            }
 
             book.setUpdatetime(new Date());
             book.setDeleted(0L);
